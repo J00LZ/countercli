@@ -36,7 +36,7 @@ func main() {
 			return
 		}
 		fmt.Println(num)
-	case "add":
+	case "create":
 		st, err := cfg.postCounter(path)
 		if err != nil {
 			log.Fatal(err)
