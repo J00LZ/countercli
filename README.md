@@ -1,5 +1,5 @@
 # countercli
-> a cli for [counter](/NULLx76/counter)
+> a cli for [counter](https://github.com/NULLx76/counter)
 
 this is a simple cli for counter, so instead of having to make actual curl requests you can do it with this shitty program!
 
