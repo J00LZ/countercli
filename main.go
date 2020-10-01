@@ -28,7 +28,7 @@ func main() {
 		log.Fatal("missing required arguments (countercli method url [auth]")
 	}
 	path := os.Args[2]
-	switch os.Args[1] {
+	switch p := os.Args[1]; p {
 	case "get":
 		num, err := cfg.getCounter(path)
 		if err != nil {
@@ -43,13 +43,15 @@ func main() {
 			return
 		}
 		fmt.Printf("value: 0, token: %v", st)
+	case "decrement":
+		fallthrough
 	case "increment":
 		if ln < 4 {
 			log.Fatal("missing required arguments (countercli method url [auth]")
 			return
 		}
 		token := "Bearer " + os.Args[3]
-		foo, err := cfg.putCounter(path, token)
+		foo, err := cfg.patchCounter(path, token, p)
 		if err != nil {
 			log.Fatal(err)
 			return
@@ -85,8 +87,8 @@ func (c *Config) deleteCounter(path string, authHeader string) error {
 	return nil
 }
 
-func (c *Config) putCounter(path string, authHeader string) (int, error) {
-	req, err := http.NewRequest(http.MethodPut, c.baseUrl+path, nil)
+func (c *Config) patchCounter(path string, authHeader string, op string) (int, error) {
+	req, err := http.NewRequest(http.MethodPatch, c.baseUrl+path, strings.NewReader("{\"op\": \""+op+"\"}"))
 	if err != nil {
 		return 0, err
 	}
